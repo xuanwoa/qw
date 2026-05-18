@@ -17,7 +17,7 @@ on:
 
 permissions:
   contents: read
-  packages: read
+  packages: write
 
 jobs:
   build:
@@ -37,17 +37,18 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate tags
         id: tags
         shell: bash
         run: |
-          IMAGE="xuanwoa/qw-runtime"
+          IMAGE="ghcr.io/xuanwoa/qw-runtime"
           TAGS="${IMAGE}:latest"
 
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
