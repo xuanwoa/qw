@@ -26,10 +26,14 @@ const config = {
     adminKey: adminKey,
     batchLoginConcurrency: Math.max(1, parseInt(process.env.BATCH_LOGIN_CONCURRENCY) || 5),
     simpleModelMap: process.env.SIMPLE_MODEL_MAP === 'true' ? true : false,
+    // 模型列表缓存有效期（秒），过期后下次请求自动刷新；0 = 永不过期（旧版行为）
+    modelsCacheTtl: process.env.MODELS_CACHE_TTL !== undefined ? Math.max(0, parseInt(process.env.MODELS_CACHE_TTL, 10) || 0) : 3600,
     listenAddress: process.env.LISTEN_ADDRESS || null,
     listenPort: process.env.SERVICE_PORT || 3000,
     searchInfoMode: process.env.SEARCH_INFO_MODE === 'table' ? "table" : "text",
     outThink: process.env.OUTPUT_THINK === 'true' ? true : false,
+    // 推理输出格式：默认 false = 推理走 reasoning_content 字段；true = 旧版行为（<think> 并入 content）
+    legacyReasoningInContent: process.env.LEGACY_REASONING_IN_CONTENT === 'true' ? true : false,
     redisURL: process.env.REDIS_URL || null,
     autoRefresh: true,
     autoRefreshInterval: 6 * 60 * 60,
